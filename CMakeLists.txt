@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project(input)
+include(FetchContent)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,9 +8,38 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+# Add source for node executable (link non-ros dependencies here)
+add_executable(input src/InputNode.cpp src/InputNode_node.cpp)
+target_include_directories(input PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+target_compile_features(input PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+# Make ros deps a variable so they get linked to tests as well
+set(dependencies
+        rclcpp
+        std_msgs
+        sensor_msgs
+        )
+
+# Link ros dependencies
+ament_target_dependencies(
+        input
+        ${dependencies}
+)
+
+install(TARGETS input
+        DESTINATION lib/${PROJECT_NAME})
+
+# Uncomment below to make launch files available if created
+#install(
+#        DIRECTORY launch config
+#        DESTINATION share/${PROJECT_NAME}/
+#)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
