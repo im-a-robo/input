@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(input)
+project(control)
 include(FetchContent)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -13,11 +13,11 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 # Add source for node executable (link non-ros dependencies here)
-add_executable(input src/InputNode.cpp src/InputNode_node.cpp)
-target_include_directories(input PUBLIC
+add_executable(control src/ControlNode.cpp src/ControlNode_node.cpp)
+target_include_directories(control PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>)
-target_compile_features(input PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(control PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
 # Make ros deps a variable so they get linked to tests as well
 set(dependencies
@@ -28,11 +28,11 @@ set(dependencies
 
 # Link ros dependencies
 ament_target_dependencies(
-        input
+        control
         ${dependencies}
 )
 
-install(TARGETS input
+install(TARGETS control
         DESTINATION lib/${PROJECT_NAME})
 
 # Uncomment below to make launch files available if created

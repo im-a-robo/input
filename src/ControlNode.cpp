@@ -1,4 +1,4 @@
-#include "input/InputNode_node.hpp"
+#include "control/ControlNode_node.hpp"
 
 int main(int argc, char** argv) {
     // Setup runtime
@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
     rclcpp::NodeOptions options;
 
     // Add nodes to executor
-    auto node = std::make_shared<InputNode>(options);
+    auto node = std::make_shared<ControlNode>(options);
     exec.add_node(node);
 
     // Run
