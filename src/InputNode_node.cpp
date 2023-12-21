@@ -4,6 +4,7 @@
 using namespace std::placeholders;
 
 InputNode::InputNode(const rclcpp::NodeOptions& options) : Node("InputNode", options) {
+
     // Pub Sub
     this->joystick_sub =
         this->create_subscription<sensor_msgs::msg::Joy>("/joy", 1, std::bind(&InputNode::joystick_cb, this, _1));
@@ -14,11 +15,6 @@ InputNode::InputNode(const rclcpp::NodeOptions& options) : Node("InputNode", opt
 }
 
 void InputNode::joystick_cb(const sensor_msgs::msg::Joy::SharedPtr msg) {
-
-
-    for (int i = 0; i <= msg.get()->axes.size(); i++) {
-        RCLCPP_INFO(this->get_logger(), "axis: %f, value: %f", i, msg.get()->axes.at(i));
-    }
 
     // right stick left and right move the base plate
 
