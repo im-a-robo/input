@@ -12,12 +12,26 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/serial/include)
+
+set(serial_SRCS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial/src/serial.cc 
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial/include/serial/serial.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial/include/serial/v8stdint.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial/src/impl/list_ports/list_ports_linux.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/serial/src/impl/unix.cc
+    )
+
+add_library(serial ${serial_SRCS})
+
 # Add source for node executable (link non-ros dependencies here)
 add_executable(control src/ControlNode.cpp src/ControlNode_node.cpp)
 target_include_directories(control PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>)
 target_compile_features(control PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+target_link_libraries(control serial)
 
 # Make ros deps a variable so they get linked to tests as well
 set(dependencies
