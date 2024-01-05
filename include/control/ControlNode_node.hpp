@@ -6,16 +6,15 @@
 
 class ControlNode : public rclcpp::Node {
 private:
-
     serial::Serial my_serial = serial::Serial("/dev/ttyACM0", 9600, serial::Timeout::simpleTimeout(3000));
 
     // Rate of rotation
-    float spin_rate = 1.0f;
+    int spin_rate = 1;
 
     // Angles to be published to the servos
-    float base_plate_angle = 90.0f;
-    float mid_arm_angle = 90.0f;
-    float top_arm_angle = 90.0f;
+    int base_plate_angle = 90;
+    int mid_arm_angle = 90;
+    int top_arm_angle = 90;
 
     /// Subscriber for receiving joystick messages
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_sub;
